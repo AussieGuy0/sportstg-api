@@ -1,2 +1,2 @@
-# SportsTG API
+# SportsTG API [![Build Status](https://travis-ci.org/AussieGuy0/sportstg-api.svg?branch=master)](https://travis-ci.org/AussieGuy0/sportstg-api)
 A node.js library to scrape sports information from [SportsTG](https://sportstg.com/) based sites.
