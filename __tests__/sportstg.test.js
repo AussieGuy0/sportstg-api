@@ -22,21 +22,11 @@ test('Get ladder returns correct size', () => {
 
 test('Get ladder returns correct results', () => {
     expect.assertions(1)
+    const expected = {'a': 40, 'b': 0, 'd': 0, 'f': 140, 'fa': 0, 'gd': 100, 'l': 0, 'p': 10, 'pos': 1, 'pts': 30, 'team': 'Real Real', 'w': 10}
     return connector.getLadder(compId, 1)
         .then((ladder) => {
             const firstTeam = ladder[0]
-            expect(firstTeam).toMatchObject({ pos: 1,
-                team: 'Real Real',
-                p: 1,
-                w: 1,
-                b: 0,
-                d: 0,
-                l: 0,
-                fa: 0,
-                f: 14,
-                a: 4,
-                gd: 10,
-                pts: 3 })
+            expect(firstTeam).toMatchObject(expected)
         })
 })
 
