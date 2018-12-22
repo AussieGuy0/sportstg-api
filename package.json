@@ -1,20 +1,22 @@
 {
-  "name": "soccer",
-  "version": "1.0.0",
-  "description": "",
+  "name": "sportstg-api",
+  "version": "0.0.1",
+  "description": "A library to scrape information from SportsTG based sites",
   "main": "./src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
     "lint": "eslint \"./**/*.js\"",
     "test": "jest"
   },
-  "author": "",
+  "author": "Anthony Bruno <anthony.bruno196@gmail.com> (http://anthonybruno.com.au/)",
   "license": "ISC",
+  "repository": "github:AussieGuy0/sportstg-api",
   "dependencies": {
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2"
   },
   "devDependencies": {
+    "eslint": "^5.10.0",
     "jest": "^23.6.0"
   }
 }
