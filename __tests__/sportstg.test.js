@@ -1,8 +1,20 @@
 /**
  * @jest-environment node
  */
+assert = require('assert') //For AssertionError object definition
 const connector = require('../src/sportstg-api')
 const compId = '0-10486-0-507859-0'
+
+test('Get ladder validates compId', () => {
+    expect.assertions(1)  
+    return connector.getLadder()
+        .then((ladder) => {
+            console.log("Ladder should not be returned.")
+        })
+        .catch((error) =>{
+            expect(error).toBeInstanceOf(assert.AssertionError)
+        })
+})
 
 test('Get ladder returns array', () => {
     expect.assertions(1)
@@ -27,6 +39,28 @@ test('Get ladder returns correct results', () => {
         .then((ladder) => {
             const firstTeam = ladder[0]
             expect(firstTeam).toMatchObject(expected)
+        })
+})
+
+test('Get fixtures validates compId', () => {
+    expect.assertions(1)  
+    return connector.getRoundFixtures()
+        .then((fixtures) => {
+            console.log("Fixtures should not be returned.")
+        })
+        .catch((error) =>{
+            expect(error).toBeInstanceOf(assert.AssertionError)
+        })
+})
+
+test('Get fixtures validates roundNum', () => {
+    expect.assertions(1)   
+    return connector.getRoundFixtures(compId)
+        .then((fixtures) => {
+            console.log("Fixtures should not be returned.")
+        })
+        .catch((error) =>{
+            expect(error).toBeInstanceOf(assert.AssertionError)
         })
 })
 
