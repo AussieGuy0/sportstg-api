@@ -1,5 +1,6 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+const assert = require('assert')
 
 const baseUrl =  'http://websites.sportstg.com'
 
@@ -17,6 +18,12 @@ function getRoundUrl(compId, roundNum) {
     return `${baseUrl}/comp_info.cgi?a=ROUND&c=${compId}&pool=1&round=${roundNum}`
 }
 
+function validateArgs(){
+    let args = Array.prototype.slice.call(arguments, 0) //Get provided arguments to function
+    for(let i = 0; i < args.length; i++){
+        assert(args[i] !== undefined, 'Missing required argument')
+    }
+}
 
 async function makeGetRequest(url) {
     const response = await axios.get(url)
@@ -34,6 +41,7 @@ async function makeGetRequestAndParseBody(url) {
 
 const SportsTgConnector  = {
     getLadder: async (compId, roundNum) => {
+        validateArgs(compId) //roundNum optional
         const url = getLadderUrl(compId, roundNum)
         const $ = await makeGetRequestAndParseBody(url)
         const headingRow = []
@@ -61,6 +69,7 @@ const SportsTgConnector  = {
         return teams
     },
     getRoundFixtures: async (compId, roundNum) => {
+        validateArgs(compId, roundNum)
         const url = getRoundUrl(compId, roundNum)
         const $ = await makeGetRequestAndParseBody(url)
         const fixtures = []
