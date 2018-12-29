@@ -21,7 +21,7 @@ function getRoundUrl(compId, roundNum) {
 function validateArgs(){
     let args = Array.prototype.slice.call(arguments, 0) //Get provided arguments to function
     for(let i = 0; i < args.length; i++){
-        assert(args[i] !== undefined, "Missing required argument")
+        assert(args[i] !== undefined, 'Missing required argument')
     }
 }
 
