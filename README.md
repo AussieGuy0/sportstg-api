@@ -8,13 +8,13 @@ A node.js library to scrape sports information from [SportsTG](https://sportstg.
 ```js
 const sportstg = require('/sportstg-api')
 
-//The compId is the 'c' query param that identifies a SportsTG competition
-//It will look something like this: "0-3-0-508661-0"
-//http://websites.sportstg.com/comp_info.cgi?c=0-3-0-508661-0" 
+// The compId is the 'c' query param that identifies a SportsTG competition
+// It will look something like this: "0-3-0-508661-0"
+// http://websites.sportstg.com/comp_info.cgi?c=0-3-0-508661-0" 
 const compId = "0-3-0-508661-0"
 
-//Parses the ladder table into an array of objects
-//Second parameter is an optional round number
+// Parses the ladder table into an array of objects
+// Second parameter is an optional round number
 sportstg.getLadder(compId, 2)
     .then((ladder) => {
         //Each object key is a table heading. 
@@ -26,8 +26,8 @@ sportstg.getLadder(compId, 2)
     })
     
 
-//Parses a specific round's fixtures into an array of objects
-//Second parameter is a non-optional round number
+// Parses a specific round's fixtures into an array of objects
+// Second parameter is a non-optional round number
 sportstg.getRoundFixtures(compId, 2)
     .then((fixtures) => {
         //Example:
