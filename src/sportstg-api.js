@@ -5,7 +5,7 @@ const baseUrl =  'http://websites.sportstg.com'
 
 
 function getLadderUrl(compId, roundNum) {
-    const url = `${baseUrl}/comp_info.cgi?c=${compId}`
+    const url = `${baseUrl}/comp_info.cgi?c=${compId}&pool=1`
     if (roundNum != null) {
         return url  + `&round=${roundNum}`
     } else {
