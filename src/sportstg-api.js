@@ -1,5 +1,6 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+const log = require('./logging.js')('sportstg')
 
 const baseUrl =  'http://websites.sportstg.com'
 
@@ -27,6 +28,7 @@ async function makeGetRequest(url) {
 }
 
 async function makeGetRequestAndParseBody(url) {
+    log.debug(`Fetching url ${url}`)
     const response = await makeGetRequest(url)
     return cheerio.load(response.data)
 }
@@ -37,17 +39,22 @@ const SportsTgConnector  = {
         const url = getLadderUrl(compId, roundNum)
         const $ = await makeGetRequestAndParseBody(url)
         const headingRow = []
-        $('.tableContainer tbody tr th').each(function(index, headingElement) {
+        $('.tableContainer tbody tr th').each((index, headingElement) => {
             headingRow.push($(headingElement).text().toLowerCase()) 
         })
+        log.debug(`Ladder heading row is ${headingRow}`)
+
+        if (headingRow.length === 0) {
+            throw new Error(`No ladder found on the page! Please check '${url}' in a browser and change the compId (${compId}) to a valid competition.\nIf there is a ladder on the page, please raise a GitHub issue.`)
+        }
 
         const teams = []
-        $('.tableContainer tbody tr').each(function(index, row) {
+        $('.tableContainer tbody tr').each((index, row) => {
             if (index === 0) {
                 return //skip heading row
             }
             const team = {}
-            $(row).find('td').each(function(index, cell) {
+            $(row).find('td').each((index, cell) => {
                 const heading = headingRow[index]
                 const cellText = $(cell).text()
                 if (heading === 'team') {
@@ -64,7 +71,7 @@ const SportsTgConnector  = {
         const url = getRoundUrl(compId, roundNum)
         const $ = await makeGetRequestAndParseBody(url)
         const fixtures = []
-        $('.classic-results .fixturerow').each(function (index, element) {
+        $('.classic-results .fixturerow').each((index, element) => {
             const currentElement = $(element)
             function getText(selector) {
                 return currentElement.children(selector).text()

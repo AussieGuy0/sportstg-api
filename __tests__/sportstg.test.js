@@ -30,6 +30,13 @@ test('Get ladder returns correct results', () => {
         })
 })
 
+test('Get ladder invalid compId throws error', () => {
+    expect.assertions(1)
+    const invalidCompId = '1-7919-0-0-0'
+    return connector.getLadder(invalidCompId, 1)
+        .catch(e => expect(e).toBeInstanceOf(Error))
+})
+
 test('Get fixtures returns array', () => {
     expect.assertions(1)
     return connector.getRoundFixtures(compId, 1)
