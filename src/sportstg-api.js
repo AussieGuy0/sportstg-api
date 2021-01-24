@@ -2,7 +2,7 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const log = require('./logging.js')('sportstg')
 
-const baseUrl =  'http://websites.sportstg.com'
+const baseUrl = 'http://websites.sportstg.com'
 
 
 function getLadderUrl(compId, roundNum) {
@@ -18,8 +18,8 @@ function getRoundUrl(compId, roundNum) {
     return `${baseUrl}/comp_info.cgi?a=ROUND&c=${compId}&pool=1&round=${roundNum}`
 }
 
-
 async function makeGetRequest(url) {
+    log.debug(`Fetching url ${url}`)
     const response = await axios.get(url)
     if (response.status < 200 || response.status > 299) {
         throw new Error(response)
@@ -28,11 +28,49 @@ async function makeGetRequest(url) {
 }
 
 async function makeGetRequestAndParseBody(url) {
-    log.debug(`Fetching url ${url}`)
     const response = await makeGetRequest(url)
-    return cheerio.load(response.data)
+    return parseHtml(response.data)
 }
 
+function parseHtml(html) {
+    return cheerio.load(html)
+}
+
+function parseClassicFixtures($) {
+    const fixtures = []
+    $('.classic-results .fixturerow').each((index, element) => {
+        const currentElement = $(element)
+        function getText(selector) {
+            return currentElement.children(selector).text()
+        }
+        const fixture = {
+            date: getText('.matchdate'),
+            homeTeam: getText('.hometeam'),
+            homeScore: parseInt(getText('.homescore')),
+            awayTeam: getText('.awayteam'),
+            awayScore: parseInt(getText('.awayscore'))
+        }
+        fixtures.push(fixture)
+    })
+    return fixtures
+}
+
+function parseModernFixtures(rawHtml) {
+    const matchesJsonStart = 'var matches = '
+    const indexOfMatches = rawHtml.indexOf(matchesJsonStart)
+    if (indexOfMatches === -1) {
+        throw new Error('Tried to parse fixtures as modern but could not find "matches" json')
+    }
+    const endScriptTagIndex = rawHtml.indexOf('</script>', indexOfMatches)
+    if (endScriptTagIndex === -1) {
+        throw new Error('Tried to parse fixtures as modern but could not find end of "matches" json')
+    }
+
+    // - 1 on end index to remove semicolon
+    const rawJson = rawHtml.substring(indexOfMatches + matchesJsonStart.length, endScriptTagIndex - 1)
+    const fixures = JSON.parse(rawJson)
+    return fixures
+}
 
 const SportsTgConnector  = {
     getLadder: async (compId, roundNum) => {
@@ -69,26 +107,22 @@ const SportsTgConnector  = {
     },
     getRoundFixtures: async (compId, roundNum) => {
         const url = getRoundUrl(compId, roundNum)
-        const $ = await makeGetRequestAndParseBody(url)
-        const fixtures = []
-        $('.classic-results .fixturerow').each((index, element) => {
-            const currentElement = $(element)
-            function getText(selector) {
-                return currentElement.children(selector).text()
-            }
-            const fixture = {
-                date: getText('.matchdate'),
-                homeTeam: getText('.hometeam'),
-                homeScore: parseInt(getText('.homescore')),
-                awayTeam: getText('.awayteam'),
-                awayScore: parseInt(getText('.awayscore'))
-            }
-            fixtures.push(fixture)
-
-        })
+        const response = await makeGetRequest(url)
+        const html = response.data
+        const $ = parseHtml(html)
+        let fixtures = []
+        if ($('.classic-results').length > 0) {
+            log.debug('Detected classic results table')
+            fixtures = parseClassicFixtures($)
+        } else {
+            log.debug('Detected modern results table')
+            fixtures = parseModernFixtures(html)
+        }
+        if (fixtures.length === 0) {
+            log.debug(`No fixtures found for compId: ${compId}, roundNum: ${roundNum}. Full url: ${url}`)
+        }
         return fixtures
     }
-
 }
 
 
