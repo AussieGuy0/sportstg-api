@@ -3,7 +3,8 @@
  */
 const connector = require('../src/sportstg-api')
 const compId = '0-10486-0-539364-0'
-const modernCompId = '1-7917-0-567882-0'
+const modernCompId = '1-7917-0-579261-0'
+const wrapCompId = '1-6038-0-563114-0'
 
 test('Get ladder returns array', () => {
     expect.assertions(1)
@@ -80,6 +81,22 @@ test('Get modern fixtures returns correct size', () => {
     expect.assertions(1)
     return connector.getRoundFixtures(modernCompId, 1)
         .then((fixtures) => {
-            expect(fixtures.length).toEqual(5)
+            expect(fixtures.length).toEqual(7)
+        })
+})
+
+test('Get wrap fixtures returns array', () => {
+    expect.assertions(1)
+    return connector.getRoundFixtures(wrapCompId, 1)
+        .then((fixtures) => {
+            expect(fixtures).toBeInstanceOf(Array)
+        })
+})
+
+test('Get wrap fixtures returns correct size', () => {
+    expect.assertions(1)
+    return connector.getRoundFixtures(wrapCompId, 1)
+        .then((fixtures) => {
+            expect(fixtures.length).toEqual(3)
         })
 })

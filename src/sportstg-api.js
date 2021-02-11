@@ -55,6 +55,26 @@ function parseClassicFixtures($) {
     return fixtures
 }
 
+function parseWrapFixtures($) {
+    const fixtures = []
+    $('.all-fixture-wrap .fixturerow').each((index, element) => {
+        const currentElement = $(element)
+        function getText(selector) {
+            return currentElement.find(selector).text()
+        }
+        const fixture = {
+            date: getText('.match-time'),
+            homeTeam: getText('.home-team-name'),
+            homeScore: parseInt(getText('.home-team-score')),
+            awayTeam: getText('.away-team-name'),
+            awayScore: parseInt(getText('.away-team-score'))
+        }
+        fixtures.push(fixture)
+    })
+    return fixtures
+    
+}
+
 function parseModernFixtures(rawHtml) {
     const matchesJsonStart = 'var matches = '
     const indexOfMatches = rawHtml.indexOf(matchesJsonStart)
@@ -114,6 +134,9 @@ const SportsTgConnector  = {
         if ($('.classic-results').length > 0) {
             log.debug('Detected classic results table')
             fixtures = parseClassicFixtures($)
+        } else if ($('.all-fixture-wrap').length > 0) {
+            log.debug('Detected wrap fixtures')
+            fixtures = parseWrapFixtures($)
         } else {
             log.debug('Detected modern results table')
             fixtures = parseModernFixtures(html)
