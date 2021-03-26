@@ -64,10 +64,10 @@ function parseWrapFixtures($) {
         }
         const fixture = {
             date: getText('.match-time'),
-            homeTeam: getText('.home-team-name'),
-            homeScore: parseInt(getText('.home-team-score')),
-            awayTeam: getText('.away-team-name'),
-            awayScore: parseInt(getText('.away-team-score'))
+            homeTeam: getText('.home-team .team-name'),
+            homeScore: parseInt(getText('.home-team .team-score')),
+            awayTeam: getText('.away-team .team-name'),
+            awayScore: parseInt(getText('.away-team .team-score'))
         }
         fixtures.push(fixture)
     })
