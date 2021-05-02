@@ -2,8 +2,7 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const log = require('./logging.js')('sportstg')
 
-const baseUrl = 'http://websites.sportstg.com'
-
+const baseUrl = 'https://websites.sportstg.com'
 
 function getLadderUrl(compId, roundNum) {
     const url = `${baseUrl}/comp_info.cgi?c=${compId}&pool=1`
@@ -88,8 +87,7 @@ function parseModernFixtures(rawHtml) {
 
     // - 1 on end index to remove semicolon
     const rawJson = rawHtml.substring(indexOfMatches + matchesJsonStart.length, endScriptTagIndex - 1)
-    const fixures = JSON.parse(rawJson)
-    return fixures
+    return JSON.parse(rawJson)
 }
 
 const SportsTgConnector  = {
@@ -105,7 +103,6 @@ const SportsTgConnector  = {
         if (headingRow.length === 0) {
             throw new Error(`No ladder found on the page! Please check '${url}' in a browser and change the compId (${compId}) to a valid competition.\nIf there is a ladder on the page, please raise a GitHub issue.`)
         }
-
         const teams = []
         $('.tableContainer tbody tr').each((index, row) => {
             if (index === 0) {
@@ -117,6 +114,10 @@ const SportsTgConnector  = {
                 const cellText = $(cell).text()
                 if (heading === 'team') {
                     team[heading] = cellText
+                    const teamLink =  $(cell).find('a').attr('href');
+                    if (teamLink) {
+                        team.teamLink = `${baseUrl}/${teamLink}`
+                    }
                 } else {
                     team[heading] = parseInt(cellText)
                 }
@@ -130,7 +131,7 @@ const SportsTgConnector  = {
         const response = await makeGetRequest(url)
         const html = response.data
         const $ = parseHtml(html)
-        let fixtures = []
+        let fixtures
         if ($('.classic-results').length > 0) {
             log.debug('Detected classic results table')
             fixtures = parseClassicFixtures($)

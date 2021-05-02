@@ -6,7 +6,7 @@ A node.js library to scrape sports information from [SportsTG](https://sportstg.
 
 ## Usage
 ```js
-const sportstg = require('/sportstg-api')
+const sportstg = require('sportstg-api')
 
 // The compId is the 'c' query param that identifies a SportsTG competition
 // It will look something like this: "0-3-0-508661-0"
@@ -19,7 +19,7 @@ sportstg.getLadder(compId, 2)
     .then((ladder) => {
         // Each object key is a table heading. 
         // Example:
-        // [{"b": 0, "d": 0, "ff": 0, "fg": 0, "gd": 31, "l": 0, "p": 1, "pos": 1, "pts": 3, "team": "Cool Team", "w": 1},...]
+        // [{b: 0, d: 0, ff: 0, fg: 0, gd: 31, l: 0, p: 1, pos: 1, pts: 3, team: "Cool Team", w: 1},...]
     })
     .catch((error) => {
         console.error(error)
@@ -31,7 +31,7 @@ sportstg.getLadder(compId, 2)
 sportstg.getRoundFixtures(compId, 2)
     .then((fixtures) => {
         // Example:
-        // {homeTeam: 'Team 1', homeScore: 8, awayTeam: 'Team 2', awayScore: 3 }
+        // [{homeTeam: 'Team 1', homeScore: 8, awayTeam: 'Team 2', awayScore: 3},...]
     })
     .catch((error) => {
         console.error(error)

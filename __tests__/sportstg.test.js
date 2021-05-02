@@ -24,7 +24,7 @@ test('Get ladder returns correct size', () => {
 
 test('Get ladder returns correct results', () => {
     expect.assertions(1)
-    const expected = {'a': 0, 'b': 0, 'd': 0, 'f': 8, 'fa': 0, 'gd': 8, 'l': 0, 'p': 1, 'pos': 1, 'pts': 3, 'team': 'Occasionally United', 'w': 1}
+    const expected = {a: 0, b: 0, d: 0, f: 8, fa: 0, gd: 8, l: 0, p: 1, pos: 1, pts: 3, team: 'Occasionally United', w: 1, teamLink: 'https://websites.sportstg.com/team_info.cgi?id=26500263&client=0-10486-0-539364-0&compID=539364'}
     return connector.getLadder(compId, 1)
         .then((ladder) => {
             const firstTeam = ladder[0]
