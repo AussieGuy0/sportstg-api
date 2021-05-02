@@ -114,7 +114,7 @@ const SportsTgConnector  = {
                 const cellText = $(cell).text()
                 if (heading === 'team') {
                     team[heading] = cellText
-                    const teamLink =  $(cell).find('a').attr('href');
+                    const teamLink =  $(cell).find('a').attr('href')
                     if (teamLink) {
                         team.teamLink = `${baseUrl}/${teamLink}`
                     }
