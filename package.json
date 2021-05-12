@@ -1,6 +1,6 @@
 {
   "name": "sportstg-api",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A library to scrape information from SportsTG based sites",
   "main": "./src/index.js",
   "scripts": {
