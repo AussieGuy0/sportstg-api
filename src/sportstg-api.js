@@ -3,9 +3,10 @@ const cheerio = require('cheerio')
 const log = require('./logging.js')('sportstg')
 
 const baseUrl = 'https://websites.sportstg.com'
+const defaultPoolNum = 1
 
 function getLadderUrl(compId, roundNum) {
-    const url = `${baseUrl}/comp_info.cgi?c=${compId}&pool=1`
+    const url = `${baseUrl}/comp_info.cgi?c=${compId}&pool=${defaultPoolNum}`
     if (roundNum != null) {
         return url  + `&round=${roundNum}`
     } else {
@@ -13,8 +14,9 @@ function getLadderUrl(compId, roundNum) {
     }
 }
 
-function getRoundUrl(compId, roundNum) {
-    return `${baseUrl}/comp_info.cgi?a=ROUND&c=${compId}&pool=1&round=${roundNum}`
+function getRoundUrl(compId, roundNum, poolNum) {
+    const pool = poolNum == null ? defaultPoolNum : poolNum
+    return `${baseUrl}/comp_info.cgi?a=ROUND&c=${compId}&pool=${pool}&round=${roundNum}`
 }
 
 async function makeGetRequest(url) {
@@ -126,8 +128,8 @@ const SportsTgConnector  = {
         })
         return teams
     },
-    getRoundFixtures: async (compId, roundNum) => {
-        const url = getRoundUrl(compId, roundNum)
+    getRoundFixtures: async (compId, roundNum, poolNum) => {
+        const url = getRoundUrl(compId, roundNum, poolNum)
         const response = await makeGetRequest(url)
         const html = response.data
         const $ = parseHtml(html)

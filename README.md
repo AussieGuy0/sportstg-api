@@ -28,7 +28,8 @@ sportstg.getLadder(compId, 2)
 
 // Parses a specific round's fixtures into an array of objects
 // Second parameter is a non-optional round number
-sportstg.getRoundFixtures(compId, 2)
+// Third parameter is an optional pool number. Typically 1 = regular season, 1001 = finals.
+sportstg.getRoundFixtures(compId, 2, 1)
     .then((fixtures) => {
         // Example:
         // [{homeTeam: 'Team 1', homeScore: 8, awayTeam: 'Team 2', awayScore: 3},...]

@@ -69,6 +69,40 @@ test('Get fixtures returns correct values', () => {
         })
 })
 
+test('Get fixtures returns correct values when providing pool', () => {
+    expect.assertions(1)
+    return connector.getRoundFixtures(compId, 1, 1)
+        .then((fixtures) => {
+            const firstMatch = fixtures[0]
+            expect(firstMatch).toMatchObject({
+                homeTeam: 'Going for Glory',
+                homeScore: 5,
+                awayTeam: 'Hot guys ',
+                awayScore: 2
+            })
+        })
+})
+
+test('Get fixtures returns finals when providing finals pool', () => {
+    expect.assertions(2)
+    return connector.getRoundFixtures('0-10486-0-468974-0', 2, 1001)
+        .then((fixtures) => {
+            expect(fixtures.length).toEqual(1)
+            expect(fixtures[0]).toMatchObject({
+                homeTeam: 'Don\'t Believe the Hype',
+                homeScore: 5,
+                awayTeam: 'ABallaAndChill',
+                awayScore: 3
+            })
+        })
+})
+
+test('Get fixtures throws error when providing invalid pool', () => {
+    expect.assertions(1)
+    return connector.getRoundFixtures(compId, 1, 2)
+        .catch(e => expect(e).toBeInstanceOf(Error))
+})
+
 test('Get modern fixtures returns array', () => {
     expect.assertions(1)
     return connector.getRoundFixtures(modernCompId, 1)
