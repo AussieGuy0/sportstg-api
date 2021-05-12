@@ -76,4 +76,8 @@ typings/
 .fusebox/
 
 #DynamoDB Local files 
-.dynamodb/ 
+.dynamodb/
+
+# Intellij
+.idea
+*.iml
